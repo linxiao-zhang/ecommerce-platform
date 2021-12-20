@@ -5,7 +5,13 @@ import com.imooc.pojo.bo.UserBO;
 
 public interface UserService {
 
-    public boolean queryUsernameIsExist(String username);
+    boolean queryUsernameIsExist(String username);
 
-    public Users createUser(UserBO userBO);
+    Users createUser(UserBO userBO);
+
+    /**
+     * 检索用户民和密码是否匹配用于登陆
+     */
+    Users queryUserForLogin(String username, String password);
+
 }

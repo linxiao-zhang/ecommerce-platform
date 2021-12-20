@@ -1,4 +1,6 @@
 /Users/zhanglinxiao/foodie-dev/foodie-dev-api/src/main/java/com/imooc/controller/HelloController.java
 /Users/zhanglinxiao/foodie-dev/foodie-dev-api/src/main/java/com/imooc/controller/StuFooController.java
+/Users/zhanglinxiao/foodie-dev/foodie-dev-api/src/main/java/com/imooc/config/CorsConfig.java
 /Users/zhanglinxiao/foodie-dev/foodie-dev-api/src/main/java/com/imooc/Application.java
+/Users/zhanglinxiao/foodie-dev/foodie-dev-api/src/main/java/com/imooc/config/Swagger2.java
 /Users/zhanglinxiao/foodie-dev/foodie-dev-api/src/main/java/com/imooc/controller/PassportController.java
