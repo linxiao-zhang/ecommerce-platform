@@ -1,9 +1,12 @@
 package com.imooc.service.impl;
 
 import com.imooc.enums.Sex;
+import com.imooc.mapper.StuMapper;
 import com.imooc.mapper.UsersMapper;
+import com.imooc.pojo.Stu;
 import com.imooc.pojo.Users;
 import com.imooc.pojo.bo.UserBO;
+import com.imooc.service.StuService;
 import com.imooc.service.UserService;
 import com.imooc.utils.DateUtil;
 import com.imooc.utils.MD5Utils;
@@ -14,13 +17,13 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
 @Service
 public class UserServiceImpl implements UserService {
+
     @Autowired
-    private UsersMapper usersMapper;
+    public UsersMapper usersMapper;
 
     @Autowired
     private Sid sid;
@@ -32,31 +35,44 @@ public class UserServiceImpl implements UserService {
     public boolean queryUsernameIsExist(String username) {
 
         Example userExample = new Example(Users.class);
-        Example.Criteria userCriteria =userExample.createCriteria();
-        userCriteria.andEqualTo("username",username);
-        Users result = usersMapper.selectOneByExample(userExample);
-        return result != null;
+        Example.Criteria userCriteria = userExample.createCriteria();
 
+        userCriteria.andEqualTo("username", username);
+
+        Users result = usersMapper.selectOneByExample(userExample);
+
+        return result == null ? false : true;
     }
+
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public Users createUser(UserBO userBO) {
+
+//        try {
+//            Thread.sleep(3500);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
         String userId = sid.nextShort();
+
         Users user = new Users();
         user.setId(userId);
         user.setUsername(userBO.getUsername());
         try {
             user.setPassword(MD5Utils.getMD5Str(userBO.getPassword()));
-        } catch (NoSuchAlgorithmException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
+        // 默认用户昵称同用户名
         user.setNickname(userBO.getUsername());
-        //默认头像
+        // 默认头像
         user.setFace(USER_FACE);
-        //默认生日
+        // 默认生日
         user.setBirthday(DateUtil.stringToDate("1900-01-01"));
-        //默认性别为保密
+        // 默认性别为 保密
         user.setSex(Sex.secret.type);
+
         user.setCreatedTime(new Date());
         user.setUpdatedTime(new Date());
 
@@ -64,16 +80,25 @@ public class UserServiceImpl implements UserService {
 
         return user;
     }
+
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public Users queryUserForLogin(String username, String password) {
 
+//        try {
+//            Thread.sleep(2500);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
         Example userExample = new Example(Users.class);
-        Example.Criteria userCriteria  = userExample.createCriteria();
-        userCriteria.andEqualTo("username",username);
-        userCriteria.andEqualTo("password",password);
-        return usersMapper.selectOneByExample(userExample);
+        Example.Criteria userCriteria = userExample.createCriteria();
 
+        userCriteria.andEqualTo("username", username);
+        userCriteria.andEqualTo("password", password);
 
+        Users result = usersMapper.selectOneByExample(userExample);
+
+        return result;
     }
 }
